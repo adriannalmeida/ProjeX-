@@ -10,10 +10,10 @@ ProjeX is a project management tool that smooths task management, communication,
 
 ## Project Components
 
-- [ER: Requirements Specification](https://gitlab.up.pt/lbaw/lbaw2425/lbaw24044/-/wikis/ER)
-- [EBD: Database Specification](https://gitlab.up.pt/lbaw/lbaw2425/lbaw24044/-/wikis/ebd)
-- [EAP: Architecture Specification and Prototype](https://gitlab.up.pt/lbaw/lbaw2425/lbaw24044/-/wikis/eap)
-- [PA: Product and Presentation](https://gitlab.up.pt/lbaw/lbaw2425/lbaw24044/-/wikis/pa)
+- [ER: Requirements Specification](wiki/ER)
+- [EBD: Database Specification](wiki/ebd)
+- [EAP: Architecture Specification and Prototype](wiki/eap)
+- [PA: Product and Presentation](wiki/pa)
 
 ## Artefacts Checklist
 
