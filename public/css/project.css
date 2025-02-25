@@ -1,0 +1,324 @@
+.modal, .panel {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 8rem 0 2rem 0;
+    justify-items: end;
+    background-color: unset;
+    z-index: 10;
+    grid-template-areas: 'content';
+}
+
+.modal {
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.fade-in-modal {
+    background-color: unset;
+    animation: fade-in-modal 0.2s forwards;
+}
+
+.fade-out-modal {
+    background-color: rgba(0,0,0,0.1);
+    animation: fade-out-modal 0.2s forwards;
+}
+
+.modal-content {
+    position: relative;
+    background: var(--background);
+    border-radius: 1rem;
+    padding: 2rem;
+    width: 40rem;
+    max-width: 80%;
+    overflow: auto;
+    box-shadow: -4px 4px 16px rgba(0,0,0,0.4);
+}
+
+.open-panel-anim {
+    transform: translateX(100%);
+    animation: open-panel-anim 0.5s forwards;
+}
+
+.close-panel-anim {
+    transform: translateX(0);
+    animation: close-panel-anim 0.5s forwards;
+}
+
+.open-modal-anim {
+    opacity: 0;
+    transform: scale(0.8);
+    animation: open-modal-anim 0.2s forwards;
+}
+
+.close-modal-anim {
+    opacity: 1;
+    transform: scale(1);
+    animation: close-modal-anim 0.2s forwards;
+}
+
+.modal-actions, .panel-actions {
+    display: flex;
+    align-items: center;
+    grid-area: actions;
+}
+
+.close-modal, .close-panel {
+    margin-bottom: 0;
+}
+
+.modal-header .taskPriority, .panel-header .taskPriority {
+    width: fit-content;
+    font-weight: bold;
+    font-size: small;
+    margin: 0;
+}
+
+.modal-header .startDate, .panel-header .startDate {
+    grid-area: date;
+}
+
+#taskAssignPanel {
+    list-style: none;
+    margin: 1rem 0 0 0;
+    padding: 1rem;
+    max-height: 34dvh;
+    overflow: auto;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+}
+
+.date {
+    margin: 0 0 0 1rem;
+}
+
+.date * {
+    font-size: small;
+}
+
+.modal-header {
+    display: grid;
+    flex-wrap: wrap-reverse;
+    grid-template-areas: 'title title actions' 'priority date date';
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.panel-header {
+    display: grid;
+    flex-wrap: wrap-reverse;
+    grid-template-areas: 'title title actions' 'priority date date';
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.modal-header h2, .panel-header h2 {
+    grid-area: title;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    font-size: x-large;
+    color: #333;
+    margin: 0;
+}
+
+.modal-body, .panel-body {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.modal-body i, .panel-modal i {
+    color: #999;
+    font-size: 20px;
+}
+
+.modal-body:hover i, .panel-modal:hover i {
+    color: #000;
+}
+
+.assignees-list {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.assignees-list > p {
+    margin: 0;
+}
+
+.assignees-list img, #taskAssignPanel img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+#noUsersMessage {
+    margin-bottom: 0;
+}
+
+#taskAssignPanel .user-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#taskAssignPanel .user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#taskAssignPanel .user-item:last-child {
+    margin-bottom: 0;
+}
+
+#taskAssignPanel .user-item img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+#taskAssignPanel .user-item label {
+    flex-grow: 1;
+    font-size: small;
+    margin: 0 0 0 0.5rem;
+}
+
+#taskAssignPanel .user-item input[type="checkbox"] {
+    transform: scale(1.2);
+    margin: 0.5rem 0.5rem 0.5rem 1rem;
+}
+
+#commentsContainer {
+    overflow-y: auto;
+    max-height: 50dvh;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+textarea#messageContentComponent {
+    width: 100%;
+    margin: 0;
+    resize: none;
+    max-height: 3rem;
+    font-size: 1.1rem;
+    overflow-y: hidden;
+}
+
+#commentForm button {
+    width: 40%;
+    margin: 0 30%;
+}
+
+button[type="submit"], .icon-button {
+    background-color: var(--primary);
+    border: none;
+    color: white;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-cancel {
+    background-color: var(--text-secondary);
+    border: none;
+    color: white;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#deleteTaskForm > button:hover {
+    background-color: #fff;
+}
+
+.form-control, .form-select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+form {
+    margin: 0;
+}
+
+@keyframes fade-in-modal {
+    100% {
+        background-color: rgba(0,0,0,0.1);
+    }
+}
+
+@keyframes fade-out-modal {
+    100% {
+        background-color: unset;
+        visibility: hidden;
+    }
+}
+
+@keyframes open-panel-anim {
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes close-panel-anim {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes open-modal-anim {
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes close-modal-anim {
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}

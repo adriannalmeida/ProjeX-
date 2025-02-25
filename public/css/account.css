@@ -1,0 +1,205 @@
+.profile-header-bar {
+    background-color: var(--accent-secondary);
+    color: var(--background);
+    padding: 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+}
+
+.profile-header-bar h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.profile-header-bar p {
+    font-size: 1.2rem;
+    margin: 5px 0 0;
+    color: #d0e6ff;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    width: 90%;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.left-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.profile-photo {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 4px solid var(--accent-secondary);
+}
+
+.profile-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.edit-profile-button {
+    background-color: var(--primary);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.3rem;
+    border-radius: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.edit-profile-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+    color: white;
+}
+
+.edit-profile-button:focus {
+    color: white;
+}
+
+.right-section {
+    flex-grow: 1;
+    min-width: 60%;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+}
+
+.contact-info {
+    list-style: none;
+    padding-left: 4rem;
+    margin: 0;
+}
+
+.contact-info li {
+    font-size: 1.4rem;
+    color: #555;
+    margin: 20px 0;
+}
+
+.contact-info li strong {
+    color: #000;
+    font-size: 1.5rem;
+}
+
+.no-invitations, .no-notifications {
+    font-size: medium;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.container-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#content .container-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--accent-primary);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+#content .notification-item {
+    padding-top: 3rem;
+}
+
+#content .container-list-item:last-of-type {
+    margin-bottom: 0;
+}
+
+#content .invitations-section .container-list-item:hover, .notifications-section .container-list-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#content .invitations-section .invitation-project, .notifications-section .invitation-project, #content .invitations-section .notification-description, .notifications-section .notification-description {
+    font-size: medium;
+    color: black;
+    margin: 0;
+}
+
+#content .invitations-section .accept-actions, .notifications-section .accept-actions {
+    display: flex;
+    gap: 10px;
+}
+
+#content .invitations-section .accept-btn, .notifications-section .accept-btn, #content .invitations-section .decline-btn, .notifications-section .decline-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease;
+}
+
+#content .invitations-section .accept-btn, .notifications-section .accept-btn {
+    color: #28a745;
+    border: 2px solid #28a745;
+}
+
+#content .invitations-section .accept-btn:hover, .notifications-section .accept-btn:hover {
+    background: #28a745;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+#content .invitations-section .decline-btn, .notifications-section .decline-btn {
+    color: #dc3545;
+    border: 2px solid #dc3545;
+}
+
+#content .invitations-section .decline-btn:hover, .notifications-section .decline-btn:hover {
+    background: #dc3545;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.notification-date {
+    color: var(--text-secondary);
+    font-size: small;
+    margin: 0;
+    position: absolute;
+    top: 0.5rem;
+    left: 1rem;
+}
+
+.profile-photo-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+}

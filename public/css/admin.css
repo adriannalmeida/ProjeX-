@@ -1,0 +1,171 @@
+body {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+.dynamic-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin: 0;
+    width: 100%;
+    padding: 0 55px;
+}
+
+.admin-title h1 {
+    margin: 0;
+    font-size: 30px;
+    color: var(--primary);
+}
+
+.admin-title {
+    height: 8rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    padding: 0 15px;
+}
+
+table th, table td {
+    padding: 1rem;
+}
+
+.searchUsers {
+    display: flex;
+    gap: 10px;
+    position: relative;
+}
+
+.searchUsers > :first-child {
+    flex-grow: 1;
+}
+
+.searchUsers #results-container {
+    transform: translateY(4rem);
+}
+
+.filter-btn {
+    background-color: transparent;
+    color: gray;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.filter-btn:hover {
+    background-color: var(--accent-tertiary);
+    color: black;
+}
+
+.filter-btn i {
+    margin: 0;
+}
+
+.filter-options {
+    display: none;
+    position: absolute;
+    left: 95%;
+    background-color: white;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 10;
+    overflow: hidden;
+    min-width: 150px;
+}
+
+.filter-options a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #151515;
+    font-size: 14px;
+}
+
+.filter-options a:hover {
+    background-color: #f1f1f1;
+    color: #0056b3;
+}
+
+.filter-dropdown {
+    position: relative;
+}
+
+.filter-dropdown:hover .filter-options {
+    display: block;
+}
+
+.admin-tabs-container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: min-content;
+    margin: 0.5rem 0 0 0;
+}
+
+.admin-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    margin: 0 auto;
+    width: fit-content;
+    border-radius: 10rem;
+    background-color: var(--accent-primary);
+}
+
+.admin-tab-button {
+    background: var(--accent-primary);
+    align-content: center;
+    color: var(--text-secondary);
+    border: none;
+    padding: 1rem 1.5rem;
+    font-size: medium;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 10rem;
+    transition: all 0.3s ease;
+    transform: scale(0.9);
+}
+
+.admin-tab-button.active {
+    cursor: default;
+    font-weight: bold;
+    background: var(--quaternary);
+    color: black;
+    transform: scale(1);
+}
+
+.admin-tab-button:not(.active):hover {
+    background: var(--accent-quaternary);
+    color: black;
+    transform: scale(1);
+}
+
+.admin-tab-content {
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+.admin-tab-content form {
+    display: none;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.admin-tab-content form.active {
+    display: block;
+}
+
+.tab-content {
+    margin-top: 0;
+}

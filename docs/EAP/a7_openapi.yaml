@@ -1,0 +1,1260 @@
+openapi: 3.0.0
+
+info:
+  version: '1.0'
+  title: 'LBAW ProjeX Web API'
+  description: 'Web Resources Specification (A7) for ProjeX'
+
+servers:
+  - url: http://localhost:8000
+    description: Production server
+
+externalDocs:
+  description: Find more info here.
+  url: https://git.fe.up.pt/lbaw/lbaw2425/lbaw2444/-/wikis/home/EAP.md
+
+tags:
+  - name: 'M01: Main page and Navigation'
+  - name: 'M02: Authentication and Individual Profile Management'
+  - name: 'M03: Project Management'
+  - name: 'M04: Task Management'
+  - name: 'M05: Project Member Management'
+  - name: 'M06: User Administration'
+
+
+
+paths:
+
+  "/mainPage":
+    get:
+      operationId: R101
+      summary: 'R101: Display the main page for unauthenticated users'
+      description: 'Main Page with information about the application. Access: PUB'
+      tags:
+        - 'M01: Main page and Navigation'
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 200
+
+  "/login":
+    get:
+      operationId: R201
+      summary: 'R201: Display a login form'
+      description: 'Provide login form. Access: PUB'
+      tags:
+        - 'M02: Authentication and Individual Profile Management.'
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 200
+    post:
+      operationId: R202
+      summary: 'R202: Handle an authentication attempt'
+      description: 'Processes the login form submission. Access: PUB'
+      tags:
+        - 'M02: Authentication and Individual Profile Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username/email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username/email
+                - password
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 302
+        '422':
+          "$ref": "#/components/responses/ValidationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/register":
+    get:
+      operationId: R203
+      summary: 'R203: Display a register form.'
+      description: 'Registration form. Access: PUB'
+      tags:
+        - 'M02: Authentication and Individual Profile Management'
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      operationId: R204
+      summary: 'R204: Register a new user'
+      description: 'Processes registration. Access: PUB'
+      tags:
+        - 'M02: Authentication and Individual Profile Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  minLength: 8
+                  maxLength: 250
+                name:
+                  type: string
+                  maxLength: 250
+                email:
+                  type: string
+                  format: email
+                  maxLength: 250
+                password:
+                  type: string
+                  minLength: 8
+                workfield:
+                  type: string
+                  nullable: true
+                  maxLength: 250
+                city:
+                  type: integer
+                  nullable: true
+                password_confirmation:
+                  type: string
+                  minLength: 8
+              required:
+                - username
+                - name
+                - email
+                - password
+                - password_confirmation
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '422':
+          "$ref": "#/components/responses/ValidationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/logout":
+    get:
+      operationId: R205
+      summary: 'R205: Log out the user from the application'
+      description: 'Processes logout. Access: USR'
+      tags:
+        - 'M02: Authentication and Individual Profile Management'
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 302
+
+  "/account":
+    get:
+      operationId: R206
+      summary: 'R206: View user profile page'
+      description: 'Display individual user profile. Access: PUB'
+      tags:
+      - 'M02: Authentication and Individual Profile Management'
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+
+  "/account/edit":
+    get:
+      operationId: R207
+      summary: 'R207: Edit Profile Form'
+      description: 'Provide edit profile form. Access: USR, ADM'
+      tags:
+      - 'M02: Authentication and Individual Profile Management'
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+
+  "/account/update/{id}":
+    put:
+      operationId: R208
+      summary: 'Handles update of profile information'
+      description: "Processes account edit. Access: PUB, ADM"
+      tags:
+      - 'M02: Authentication and Individual Profile Management'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "Optional"
+        schema:
+          type: string
+        x-optional: true
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '422':
+          "$ref": "#/components/responses/ValidationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/account/updatePassword/{id}":
+    put:
+      operationId: R209
+      summary: 'R209: Update user password'
+      description: 'Processes password change. Access: PUB'
+      tags:
+      - 'M02: Authentication and Individual Profile Management'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "Optional"
+        schema:
+          type: string
+        x-optional: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password:
+                  type: string
+                  minLength: 8
+                password:
+                  type: string
+                  minLength: 8
+                password_confirmation:
+                  type: string
+                  minLength: 8
+              required:
+              - current_password
+              - password
+              - password_confirmation
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/invitation/{invitation}/accept":
+    patch:
+      operationId: R210
+      summary: 'R210: Accept an invitation'
+      description: 'Processes invitation acceptance. Access: USR'
+      tags:
+        - 'M02: Authentication and Individual Profile Management'
+      parameters:
+        - name: invitation
+          in: path
+          required: true
+          description: User accepts project invitation
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+        '404':
+          "$ref": "#/components/responses/ModelNotFoundException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/invitation/{invitation}/decline":
+    delete:
+      operationId: R211
+      summary: 'R211: Decline an invitation'
+      description: 'Processes invitation rejection. Access: USR'
+      tags:
+        - 'M02: Authentication and Individual Profile Management'
+      parameters:
+        - name: invitation
+          in: path
+          required: true
+          description: User declines project invitation
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+        '404':
+          "$ref": "#/components/responses/ModelNotFoundException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/projects":
+    get:
+      operationId: R301
+      summary: 'R301: Display listing of projects'
+      description: 'List of user projects. Access: USR'
+      tags:
+        - 'M03: Project Management'
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+    post:
+      operationId: R302
+      summary: 'R302: Create new project'
+      description: 'Form to create new Project. Access: USR'
+      tags:
+        - 'M03: Project Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                description:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                isPublic:
+                  type: boolean
+                finishDate:
+                  type: string
+                  nullable: true
+
+              required:
+                - name
+                - isPublic
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    example: Project created successfully.
+                required:
+                  - success
+                  - message
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '422':
+          "$ref": "#/components/responses/ValidationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/projects/search":
+    get:
+      operationId: R303
+      summary: 'R303: Search project'
+      description: 'Search project by name or description. Access: USR'
+      tags:
+        - 'M03: Project Management'
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: string
+                required:
+                  - projects
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+
+  "/project/{id}":
+    get:
+      operationId: R304
+      summary: 'R304: Project page'
+      description: 'Display project Page Access: MEM'
+      tags:
+        - 'M03: Project Management'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+
+  "/project/{project}/projectMembers":
+    get:
+      operationId: R305
+      summary: 'R305: Project members page'
+      description: 'Show all project members. Access: MEM, COORD'
+      tags:
+        - 'M03: Project Management'
+      parameters:
+        - name: project
+          in: path
+          required: true
+          description: Project member information
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+        '404':
+          "$ref": "#/components/responses/ModelNotFoundException"
+
+  "/project/{projectId}/addToFavorites":
+    put:
+      operationId: R306
+      summary: 'R306: Add Favourite Project'
+      description: 'Add project to Favourites. Access: MEM'
+      tags:
+        - 'M03: Project Management'
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Project added to favourites successfully!
+                    required:
+                      - message
+                  - type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/project/{project}/task-tables":
+    get:
+      operationId: R401
+      summary: 'R:401: Project Task Tables'
+      description: 'Display projects Task Tables. Access: MEM'
+      tags:
+        - 'M04: Task Management'
+      parameters:
+        - name: project
+          in: path
+          required: true
+          description: Show project task tables
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+        '404':
+          "$ref": "#/components/responses/ModelNotFoundException"
+    post:
+      operationId: R402
+      summary: 'R402: Create Task Table'
+      description: 'Processes task table creation. Access: COORD'
+      tags:
+        - 'M04: Task Management'
+      parameters:
+        - name: project
+          in: path
+          required: true
+          description: Create new task table
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+              required:
+                - name
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    properties:
+                      success:
+                        type: boolean
+                      message:
+                        type: string
+                        example: Task Table created successfully.
+                    required:
+                      - success
+                      - message
+                  - type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+        '404':
+          "$ref": "#/components/responses/ModelNotFoundException"
+        '422':
+          "$ref": "#/components/responses/ValidationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/task/{id}":
+    get:
+      operationId: R403
+      summary: 'R403: Show the task details.'
+      description: 'Retrieves the details of a specific task using its unique identifier. Access: MEM'
+      tags:
+        - 'M04: Task Management'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+    put:
+      operationId: R405
+      summary: 'R405: Update task details'
+      description: 'Updates the details of an existing task. Access: MEM'
+      tags:
+        - 'M04: Task Management'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                description:
+                  type: string
+                  nullable: true
+                  maxLength: 255
+                delivery_date:
+                  type: string
+                  nullable: true
+                priority:
+                  type: string
+                  enum:
+                    - High
+                    - Medium
+                    - Low
+              required:
+                - name
+                - priority
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    properties:
+                      success:
+                        type: boolean
+                      message:
+                        type: string
+                        example: Task updated successfully.
+                    required:
+                      - success
+                      - message
+                  - type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+        '422':
+          "$ref": "#/components/responses/ValidationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/taskTable/{taskTable}/storeTask":
+    post:
+      operationId: R404
+      summary: 'R404: Adds new tasktable'
+      description: 'Creates a new task table in the project where tasks can be stored and managed. Access: COORD'
+      tags:
+        - 'M04: Task Management'
+      parameters:
+        - name: taskTable
+          in: path
+          required: true
+          description: Create new table
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                description:
+                  type: string
+                  nullable: true
+                  maxLength: 255
+                delivery_date:
+                  type: string
+                  nullable: true
+                priority:
+                  type: string
+                  enum:
+                    - High
+                    - Medium
+                    - Low
+              required:
+                - name
+                - priority
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    properties:
+                      success:
+                        type: boolean
+                      message:
+                        type: string
+                        example: Task created successfully.
+                    required:
+                      - success
+                      - message
+                  - type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+        '404':
+          "$ref": "#/components/responses/ModelNotFoundException"
+        '422':
+          "$ref": "#/components/responses/ValidationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/task/{task}/delete":
+    put:
+      operationId: R406
+      summary: 'R406: Delete the task (deactivate it)'
+      description: 'Moves a task to a specific task table (deleted task table) to mark it as deleted (deactivated). Access: MEM'
+      tags:
+        - 'M04: Task Management'
+      parameters:
+        - name: task
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/task/{task}/complete":
+    patch:
+      operationId: R407
+      summary: 'R407: Mark a task as completed'
+      description: 'Marks a specific task as incomplete. Access: MEM'
+      tags:
+        - 'M04: Task Management'
+      parameters:
+        - name: task
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/task/{task}/incomplete":
+    patch:
+      operationId: R408
+      summary: 'R408: Mark a task as incompleted'
+      description: 'Marks a specific task as incomplete. Access: MEM'
+      tags:
+        - 'M04: Task Management'
+      parameters:
+        - name: task
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/task/{task}/change-position/{posDest}/{tableDest}":
+    put:
+      operationId: R409
+      summary: 'R409: Change task position.'
+      description: 'Changes the position of a task in the same task table or moves it to another task table.'
+      tags:
+        - 'M04: Task Management'
+      parameters:
+        - name: task
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: posDest
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: tableDest
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: Task position updated successfully.
+                required:
+                  - success
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '500':
+          description: 'Internal Server Error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Failed to update task position.
+                required:
+                  - error
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/project/{project}/task-tables/search":
+    get:
+      operationId: R410
+      summary: 'R410: Search for tasks.'
+      description: 'Searches for tasks within a specific project. Access: MEM'
+      tags:
+        - 'M04: Task Management'
+      parameters:
+        - name: project
+          in: path
+          required: true
+          description: ''
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    properties:
+                      taskTables:
+                        type: string
+                    required:
+                      - taskTables
+                  - type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+        '404':
+          "$ref": "#/components/responses/ModelNotFoundException"
+
+
+  "/project/{project}/invite":
+    post:
+      operationId: R501
+      summary: 'R501: Send an invitation to the project.'
+      description: 'Project coordinator send invite to user. Access: COORD'
+      tags:
+        - 'M05: Project Member Management'
+      parameters:
+        - name: project
+          in: path
+          required: true
+          description: '' 
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+                - email
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    example: Invitation sent successfully.
+                required:
+                  - success
+                  - message
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '403':
+          "$ref": "#/components/responses/AuthorizationException"
+        '404':
+          "$ref": "#/components/responses/ModelNotFoundException"
+        '422':
+          "$ref": "#/components/responses/ValidationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/admin":
+    get:
+      operationId: R601
+      summary: 'R601: Go to admin page.'
+      description: 'Navigates to the admin page. Access: ADM'
+      tags:
+        - 'M06: User Administration'
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+    post:
+      operationId: R603
+      summary: 'R603: Register a new user'
+      description: 'Registers a new user in the system. Access: ADM'
+      tags:
+        - 'M06: User Administration'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  minLength: 8
+                  maxLength: 250
+                name:
+                  type: string
+                  maxLength: 250
+                email:
+                  type: string
+                  format: email
+                  maxLength: 250
+                password:
+                  type: string
+                  minLength: 8
+                workfield:
+                  type: string
+                  nullable: true
+                  maxLength: 250
+                city:
+                  type: integer
+                  nullable: true
+                password_confirmation:
+                  type: string
+                  minLength: 8
+              required:
+                - username
+                - name
+                - email
+                - password
+                - password_confirmation
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '422':
+          "$ref": "#/components/responses/ValidationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/admin/search":
+    get:
+      operationId: R602
+      summary: 'R602: Search bar to search users'
+      description: 'Allows administrators to search for users based on the provided query string. Access: ADM'
+      tags:
+        - 'M06: User Administration'
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+            default: ''
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: object
+                    properties:
+                      users:
+                        type: string
+                    required:
+                      - users
+                  - type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+
+  "/admin/block/{id}":
+    patch:
+      operationId: R604
+      summary: 'R604: Block user.'
+      description: 'Blocks the user specified by the provided ID. Access: ADM.'
+      tags:
+        - 'M06: User Administration'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+        '419':
+          "$ref": '#/components/responses/CsrfError'
+
+  "/account/manage/{id}":
+    get:
+      operationId: R605
+      summary: 'R605: Go to edit account page'
+      description: 'Provides edit account form. Access: ADM'
+      tags:
+      - 'M06: User Administration'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          "$ref": "#/components/responses/AuthenticationException"
+
+
+  "/api/get-cities/{countryId}":
+    get:
+      operationId: R212
+      summary: 'R212: Request to get all cities'
+      description: 'AJAX request to get all cities. Access: PUB'
+      tags:
+      - 'M02: Authentication and Individual Profile Management'
+      parameters:
+      - name: countryId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 'OK.'
+          content:
+            application/json:
+              schema:
+                type: string
+        '500':
+          description: 'Internal Server Error.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unable to fetch cities
+                required:
+                - error
+
+components:
+  responses:
+    ValidationException:
+      description: 'Validation error'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: 'Errors overview.'
+              errors:
+                type: object
+                description: 'A detailed description of each field that failed validation.'
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+            required:
+            - message
+            - errors
+    AuthorizationException:
+      description: 'Authorization error'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: 'Error overview.'
+            required:
+            - message
+    AuthenticationException:
+      description: Unauthenticated
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: 'Error overview.'
+            required:
+            - message
+    ModelNotFoundException:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: 'Error overview.'
+            required:
+            - message
+    CsrfError:
+      description: 'CSRF token missing or invalid'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "CSRF token mismatch or missing"
+              code:
+                type: integer
+                example: 419
